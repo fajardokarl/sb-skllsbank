@@ -1,0 +1,1 @@
+<link href="<?php echo base_url(); ?>/assets/vendors/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />

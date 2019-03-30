@@ -1,0 +1,212 @@
+** Apache Alias settings
+
+Alias /skillsdb "C:/projects/skillsdb/"
+<Directory "C:/projects/skillsdb">
+    Options Indexes FollowSymLinks Includes ExecCGI
+    AllowOverride All
+    Require all granted
+</Directory>
+
+
+** .htaccess settings
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+</IfModule>
+
+** hmvc setup
+
+1. Start with a clean CI install
+2. Set $config[‘base_url’] correctly for your installation
+3. Access the URL /index.php/welcome => shows Welcome to CodeIgniter
+4. Drop Modular Extensions third_party files into the application/third_party directory
+5. Drop Modular Extensions core files into application/core, the MY_Controller.php file is not required unless you wish to create your own controller extension
+5.1. edit Loader.php line 300 change _ci_object_to_array to _ci_prepare_view_vars
+6. Access the URL /index.php/welcome => shows Welcome to CodeIgniter
+7. Create module directory structure application/modules/welcome/controllers
+8. Move controller application/controllers/welcome.php to application/modules/welcome/controllers/welcome.php
+9. Access the URL /index.php/welcome => shows Welcome to CodeIgniter
+10. Create directory application/modules/welcome/views
+11. Move view application/views/welcome_message.php to application/modules/welcome/views/welcome_message.php
+12. Access the URL /index.php/welcome => shows Welcome to CodeIgniter
+
+
+** firePHP setup
+
+firePHP location: http://www.firephp.org/
+firePHP extension for chrome: https://chrome.google.com/webstore/detail/firephp4chrome/gpgbmonepdpnacijbbdijfbecmgoojma
+
+1. Download FirePHP core 
+2. Copy the file /lib/FirePHPCore/FirePHP.class.php in CodeIgniter directory application/libraries.
+3. Rename the file FirePHP.class.php to FirePHP.php 
+4. Add firephp in the array of $autoload['libraries'] of file application/config/autoload.php (line 63). For instance, you get a line like this:
+$autoload['libraries'] = array('database','firePHP');
+5. Then you only need to log some calls to get values displayed in the Firebug console, like:
+$this->firephp->log('my string message' );
+6. you can also use profiler class for more debug info $this->output->enable_profiler(TRUE);
+
+
+** TCPDF setup --- preferred method #2 below
+
+tcpdf location: http://www.tcpdf.org/
+1. create a tcpdf folder in application/helpers
+2. Copy all TCPDF library files and paste it in “application/helpers/tcpdf/” directory
+3. Update the configuration file “tcpdf_config.php” located at application/helpers/tcpdf/config
+4. We can set logo, font, font size, with, height, header etc in the cofing file
+5. Give read, write permissions to “cache” folder which is there in tcpdf folder
+6. Create one PHP helper file in “application/helpers/” directory of codeigniter, say “pdf_helper.php”, then copy below given code and paste it in helper file
+Helper: application/helpers/pdf_helper.php
+
+function tcpdf()
+{
+    require_once('tcpdf/config/lang/eng.php');
+    require_once('tcpdf/tcpdf.php');
+}
+
+7. Then in controller file call the above helper, suppose our controller file is “createpdf.php” and it has method as pdf(), so the method pdf() will load the “pdf_helper” helper and will also have any other code.
+Controller: application/controllers/createpdf.php
+
+function pdf()
+{
+    $this->load->helper('pdf_helper');
+    /*
+        ---- ---- ---- ----
+        your code here
+        ---- ---- ---- ----
+    */
+    $this->load->view('pdfreport', $data);
+}
+
+8. Now create one view file, say “pdfreport.php” in “application/views/” directory, which is also loaded in pdf() method in controller
+View: application/views/pdfreport.php
+
+tcpdf();
+$obj_pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$obj_pdf->SetCreator(PDF_CREATOR);
+$title = "PDF Report";
+$obj_pdf->SetTitle($title);
+$obj_pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, $title, PDF_HEADER_STRING);
+$obj_pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$obj_pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+$obj_pdf->SetDefaultMonospacedFont('helvetica');
+$obj_pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$obj_pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+$obj_pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$obj_pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+$obj_pdf->SetFont('helvetica', '', 9);
+$obj_pdf->setFontSubsetting(false);
+$obj_pdf->AddPage();
+ob_start();
+
+** TCPDF setup 2
+
+Step 1
+Download TCPDF
+
+Step 2
+Unzip the above download inside application/libraries/tcpdf.
+
+Step 3
+Create a new file inside application/libraries/Pdf.php
+
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require_once dirname(__FILE__) . '/tcpdf/tcpdf.php';
+class Pdf extends TCPDF
+{ function __construct() { parent::__construct(); }
+}
+
+Step 4
+Create Controller file inside application/controllers/pdfexample.php.
+
+ <?php
+    class pdfexample extends CI_Controller{ 
+    function __construct()
+    { parent::__construct(); } function index() {
+    $this->load->library('Pdf');
+    $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+    $pdf->SetTitle('Pdf Example');
+    $pdf->SetHeaderMargin(30);
+    $pdf->SetTopMargin(20);
+    $pdf->setFooterMargin(20);
+    $pdf->SetAutoPageBreak(true);
+    $pdf->SetAuthor('Author');
+    $pdf->SetDisplayMode('real', 'default');
+    $pdf->Write(5, 'CodeIgniter TCPDF Integration');
+    $pdf->Output('pdfexample.pdf', 'I'); }
+    }
+?>
+
+Step 5
+database.php is not tracked, create a document called database.php and paste the below code
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$active_group = 'dev';
+$query_builder = TRUE;
+
+$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'henley',
+	'password' => 'henley',
+	'database' => 'skillsdb',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'development'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+$db['dev'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
+	'database' => 'skillsdb_igni641',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'development'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+$db['production'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'skillsdb_igni641',
+	'password' => 'p5(68S.9j5',
+	'database' => 'skillsdb_igni641',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);

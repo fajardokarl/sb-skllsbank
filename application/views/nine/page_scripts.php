@@ -1,0 +1,1 @@
+<script src="<?php echo base_url(); ?>/public/welcome/js/dashboard.js" type="text/javascript"></script>
