@@ -57,7 +57,6 @@ class Login extends CI_Controller {
 				$user_role = $this->login->get_user_role($user['idx']);
 				$this->session->set_userdata('user',$user);
 				$this->session->set_userdata('user_role',$user_role);
-				
 				//redirect user to proper controller
 				$url = base_url($user_role['route']);
 				echo json_encode(array('response'=>1,'redirect_url'=>$url));

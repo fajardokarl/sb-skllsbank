@@ -34,6 +34,7 @@ class Accounts_model extends MY_Model{
 
         $this->db->select('*');
         $this->db->from('user');
+        $this->db->join('person', 'person.idx=user.person_id', 'inner');
         $this->db->where('person_id', $person);
         $query = $this->db->get();
         return $query->result();

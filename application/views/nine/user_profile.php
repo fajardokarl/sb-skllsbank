@@ -1,6 +1,6 @@
 <li class="m-nav__item m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" m-dropdown-toggle="click">
     <a href="#" class="m-nav__link m-dropdown__toggle">
-        <span class="m-topbar__username m--hidden-mobile">Mark</span>
+        <span class="m-topbar__username m--hidden-mobile"><?php echo $person->display_name; ?></span>
         <span class="m-topbar__userpic">
             <img src="<?php echo base_url(); ?>/assets/app/media/img/users/user4.jpg" class="m--img-rounded m--marginless m--img-centered" alt="" />
         </span>
@@ -17,8 +17,8 @@
                         <img src="<?php echo base_url(); ?>/assets/app/media/img/users/user4.jpg" class="m--img-rounded m--marginless" alt="" />
                     </div>
                     <div class="m-card-user__details">
-                        <span class="m-card-user__name m--font-weight-500">Mark Andre</span>
-                        <a href="" class="m-card-user__email m--font-weight-300 m-link">mark.andre@gmail.com</a>
+                        <span class="m-card-user__name m--font-weight-500"><?php echo $person->display_name; ?></span>
+                        <a href="" class="m-card-user__email m--font-weight-300 m-link"><?php echo $user['email']; ?></a>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                             <span class="m-nav__section-text">Section</span>
                         </li>
                         <li class="m-nav__item">
-                            <a href="profile.html" class="m-nav__link">
+                            <a href="applicant" class="m-nav__link">
                                 <i class="m-nav__link-icon flaticon-profile-1"></i>
                                 <span class="m-nav__link-title">
                                     <span class="m-nav__link-wrap">
@@ -68,7 +68,7 @@
                         <li class="m-nav__separator m-nav__separator--fit">
                         </li>
                         <li class="m-nav__item">
-                            <a href="snippets/pages/user/login-1.html" class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</a>
+                            <a href="login/logout" class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</a>
                         </li>
                     </ul>
                 </div>
