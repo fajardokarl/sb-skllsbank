@@ -20,24 +20,15 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		//pdf test ---- uncomment to check if working
-		// $this->load->library('Pdf');
-    	// $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
-		// $pdf->SetTitle('Pdf Example');
-		// $pdf->SetHeaderMargin(30);
-		// $pdf->SetTopMargin(20);
-		// $pdf->setFooterMargin(20);
-		// $pdf->SetAutoPageBreak(true);
-		// $pdf->SetAuthor('Author');
-		// $pdf->SetDisplayMode('real', 'default');
-		// $pdf->Write(5, 'CodeIgniter TCPDF Integration');
-		// $pdf->Output('pdfexample.pdf', 'I'); 
-
+		$this->load->model('person_model',"person"); 
 
 		$this->firephp->log('my string message' );
 		//$this->output->enable_profiler(TRUE);
-
-
+		$user = $this->session->userdata('user');
+		$person = $this->person->get_person_by_user_id($user['idx']); 
+		$this->data['person'] = $person;
+		$this->data['user_profile']   = 'applicant_user_profile';
+		$this->data['user'] = $user;
 		// Theme folder located at /root/views/
 		// change theme at config/constants 
 		// check actual theme for possible values

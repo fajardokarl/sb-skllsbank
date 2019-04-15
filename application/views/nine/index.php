@@ -7,7 +7,7 @@
 		<title><?php if (isset($page_title)) echo $page_title; else echo "Skills Bank";?></title>
 		<meta name="description" content="Latest updates and statistic charts">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-
+		
 		<!--begin::Web font -->
 		<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
 		<script>
@@ -30,6 +30,7 @@
 		<?php if (isset($page_styles)) $this->load->view($page_styles);
                 else $this->load->view(THEME.'/page_styles');
         ?>
+
 		<!--end::Page Vendors Styles -->
 		<link rel="shortcut icon" href="<?php echo base_url(); ?>assets/demo/demo9/media/img/logo/favicon.ico" />
 	</head>
@@ -109,14 +110,19 @@
 						</div>
 						<div class="m-stack__item m-stack__item--right">
 							<!-- BEGIN: Topbar -->
+
 							<div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
+								<?php if(isset($user)){ ?>
 								<div class="m-stack__item m-topbar__nav-wrapper">
 									<ul class="m-topbar__nav m-nav m-nav--inline">
-										<?php if (isset($user_profile)) $this->load->view($user_profile);
-											else $this->load->view(THEME.'/user_profile');
-										?>
+										<?php $this->load->view(THEME.'/user_profile'); ?>	
 									</ul>
 								</div>
+								<?php }else{ ?>
+								<div class="m-stack__item m-stack__item--middle m-stack__item--center">
+									<a href="<?php echo base_url(); ?>login" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air sign-up-button">Sign Up</a>
+								</div>
+								<?php } ?>
 							</div>
 							<!-- END: Topbar -->
 						</div>
