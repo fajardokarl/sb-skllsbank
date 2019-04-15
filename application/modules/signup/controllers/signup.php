@@ -26,7 +26,7 @@ class Signup extends CI_Controller {
         $this->signup->add_signup($sign_up,$register_as);
 
         //send verify email here
-        $this->send_mail($sign_up);
+        // $this->send_mail($sign_up);
 
         return true;
     }
@@ -57,14 +57,14 @@ class Signup extends CI_Controller {
         $this->email->to($user['email']);
         $this->email->subject('Action Required - Skillsbank account verification');
         $this->email->message($message);
-        if($this->email->send())
-        {
-            $this->firephp->log('signup send email' );
-        }
-        else
-        {
-            $this->firephp->log($this->email->print_debugger());
-        }
+        // if($this->email->send())
+        // {
+        //     $this->firephp->log('signup send email' );
+        // }
+        // else
+        // {
+        //     $this->firephp->log($this->email->print_debugger());
+        // }
     }
 
     function verify()
