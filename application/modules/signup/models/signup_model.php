@@ -45,6 +45,7 @@ class Signup_model extends MY_Model{
         // save to person table
         $this->table = 'person';
         $person_id = '';
+        $role_id = '';
         $person = array(
             'display_name' => $data['display_name']
         );
